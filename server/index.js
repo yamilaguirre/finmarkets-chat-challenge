@@ -21,12 +21,12 @@ let connectionCount = 0;
 io.on("connection", (socket) => {
   connectionCount++;
   console.log(
-    `✅ Usuario conectado: ${socket.id} | Total conexiones: ${connectionCount}`,
+    `Usuario conectado: ${socket.id} | Total conexiones: ${connectionCount}`,
   );
 
   // Escuchar mensajes
   socket.on("message", (msg) => {
-    console.log(`📨 Mensaje recibido: ${msg}`);
+    console.log(`Mensaje recibido: ${msg}`);
     // Reenviar a todos los clientes (incluyendo el emisor)
     io.emit("message", msg);
   });
@@ -35,11 +35,11 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     connectionCount--;
     console.log(
-      `❌ Usuario desconectado: ${socket.id} | Total conexiones: ${connectionCount}`,
+      `Usuario desconectado: ${socket.id} | Total conexiones: ${connectionCount}`,
     );
   });
 });
 
 server.listen(PORT, () => {
-  console.log(`🚀 Servidor Socket.io corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor Socket.io corriendo en http://localhost:${PORT}`);
 });
