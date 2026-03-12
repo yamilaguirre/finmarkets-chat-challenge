@@ -4,6 +4,7 @@ import { socketService } from "../services/socketService";
 import { ConnectionStatus } from "./ConnectionStatus";
 import { MessageList } from "./MessageList";
 import { MessageInput } from "./MessageInput";
+import { Avatar } from "./Avatar";
 
 export const ChatWindow: React.FC = () => {
   const {
@@ -56,35 +57,72 @@ export const ChatWindow: React.FC = () => {
   return (
     <div
       style={{
-        maxWidth: "600px",
-        margin: "50px auto",
-        padding: "20px",
-        fontFamily: "Arial, sans-serif",
+        maxWidth: "700px",
+        margin: "30px auto",
+        padding: "0",
+        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+        borderRadius: "12px",
+        backgroundColor: "white",
+        overflow: "hidden",
       }}
     >
-      <h1 style={{ textAlign: "center", color: "#333" }}>
-        Chat en Tiempo Real - React
-      </h1>
-
-      <div style={{ marginBottom: "10px", color: "#666", fontSize: "14px" }}>
-        Usuario: <strong>{username}</strong>
-      </div>
-
-      <ConnectionStatus isConnected={isConnected} />
-
-      <MessageList messages={messages} />
-
-      <MessageInput onSendMessage={sendMessage} disabled={!isConnected} />
-
+      {/* Header */}
       <div
         style={{
-          marginTop: "10px",
-          fontSize: "12px",
-          color: "#999",
-          textAlign: "center",
+          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          padding: "20px",
+          color: "white",
         }}
       >
-        Los mensajes se guardan en localStorage
+        <h1
+          style={{
+            textAlign: "center",
+            margin: "0 0 15px 0",
+            fontSize: "24px",
+            fontWeight: "600",
+          }}
+        >
+          Chat en Tiempo Real - React
+        </h1>
+
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "12px",
+            backgroundColor: "rgba(255,255,255,0.15)",
+            padding: "10px 15px",
+            borderRadius: "8px",
+          }}
+        >
+          <Avatar username={username} size={36} />
+          <div>
+            <div style={{ fontSize: "14px", opacity: 0.9 }}>Conectado como</div>
+            <strong style={{ fontSize: "16px" }}>{username}</strong>
+          </div>
+        </div>
+      </div>
+
+      {/* Body */}
+      <div style={{ padding: "20px" }}>
+        <ConnectionStatus isConnected={isConnected} />
+
+        <MessageList messages={messages} />
+
+        <MessageInput onSendMessage={sendMessage} disabled={!isConnected} />
+
+        <div
+          style={{
+            marginTop: "10px",
+            fontSize: "12px",
+            color: "#999",
+            textAlign: "center",
+          }}
+        >
+          Los mensajes se guardan en localStorage
+        </div>
       </div>
     </div>
   );

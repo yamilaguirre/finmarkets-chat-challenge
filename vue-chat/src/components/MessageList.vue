@@ -9,14 +9,25 @@
       :key="message.id"
       class="message-item"
     >
-      <div class="message-content">{{ message.content }}</div>
-      <div class="message-time">{{ formatTime(message.timestamp) }}</div>
+      <Avatar :username="parseMessage(message.content).username" :size="40" />
+      <div class="message-body">
+        <div class="message-header">
+          <span class="message-username">{{
+            parseMessage(message.content).username
+          }}</span>
+          <span class="message-time">{{ formatTime(message.timestamp) }}</span>
+        </div>
+        <div class="message-content">
+          {{ parseMessage(message.content).text }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch, nextTick } from "vue";
+import Avatar from "./Avatar.vue";
 
 interface Message {
   id: string;
@@ -32,6 +43,21 @@ const messageContainer = ref<HTMLDivElement>();
 
 const formatTime = (timestamp: number): string => {
   return new Date(timestamp).toLocaleTimeString();
+};
+
+// Parsear el mensaje para extraer username y texto
+const parseMessage = (content: string) => {
+  const match = content.match(/^(.+?):\s*(.+)$/);
+  if (match) {
+    return {
+      username: match[1],
+      text: match[2],
+    };
+  }
+  return {
+    username: "Anónimo",
+    text: content,
+  };
 };
 
 const scrollToBottom = () => {
@@ -53,11 +79,11 @@ watch(
 <style scoped>
 .message-list {
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 15px;
   height: 400px;
   overflow-y: auto;
-  background-color: #f9f9f9;
+  background-color: #f5f5f5;
   margin-bottom: 15px;
 }
 
@@ -68,22 +94,47 @@ watch(
 }
 
 .message-item {
-  padding: 8px 12px;
-  margin-bottom: 8px;
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
   background-color: white;
-  border-radius: 4px;
-  border-left: 3px solid #42b883;
-  word-wrap: break-word;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s;
 }
 
-.message-content {
-  font-size: 14px;
+.message-item:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.message-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.message-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.message-username {
+  font-weight: 600;
   color: #333;
+  font-size: 14px;
 }
 
 .message-time {
   font-size: 11px;
   color: #999;
-  margin-top: 4px;
+}
+
+.message-content {
+  font-size: 14px;
+  color: #555;
+  word-wrap: break-word;
+  line-height: 1.4;
 }
 </style>
