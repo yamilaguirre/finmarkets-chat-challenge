@@ -35,10 +35,21 @@ export const ChatWindow: React.FC = () => {
       },
     );
 
+    // Escuchar errores
+    const unsubscribeErrors = socketService.onError((error: any) => {
+      console.error("[Error de Socket]", error.message);
+      if (error.type === "RECONNECTION_FAILED") {
+        alert(
+          "No se pudo reconectar al servidor. Por favor, verifica que el servidor esté corriendo y recarga la página.",
+        );
+      }
+    });
+
     // Cleanup al desmontar
     return () => {
       unsubscribeMessages();
       unsubscribeConnection();
+      unsubscribeErrors();
     };
   }, []);
 
