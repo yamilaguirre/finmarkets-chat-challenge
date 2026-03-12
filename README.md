@@ -129,8 +129,6 @@ export const useChatStore = defineStore("chat", () => {
 ```
 server/
 ├── index.js                        # Servidor principal con Socket.io
-├── test-cliente.js                 # Script de prueba para un cliente
-├── test-multiples-usuarios.js      # Simulación de 3 usuarios concurrentes
 └── package.json                    # Dependencias del servidor
 ```
 
@@ -517,46 +515,6 @@ Socket desconectado
 ```
 Socket conectado
 ```
-
-### Prueba 5: Múltiples Usuarios (Simulación)
-
-El servidor incluye un script de prueba automatizada:
-
-```bash
-cd server
-node test-multiples-usuarios.js
-```
-
-**Resultado esperado en consola:**
-
-```
-=== Iniciando test de múltiples usuarios ===
-
-Juan conectado al servidor
-María conectada al servidor
-Carlos conectado al servidor
-
-Juan dice: Hola a todos
-María dice: Hola Juan
-Carlos dice: Hola equipo
-Juan dice: Como estan?
-María dice: Muy bien, gracias
-
-=== Test completado ===
-```
-
-**Significado:**
-
-- Se crean 3 conexiones Socket.io simultáneas
-- Cada usuario envía mensajes automáticamente
-- Se simula una conversación real
-- Verifica que el broadcasting funciona correctamente
-
-**En las interfaces de navegador:**
-
-- Los mensajes de Juan, María y Carlos aparecen en tiempo real
-- Cada mensaje tiene su timestamp y username
-- La lista se actualiza automáticamente
 
 ## Solución de Problemas
 
