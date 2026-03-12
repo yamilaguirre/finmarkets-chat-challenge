@@ -24,12 +24,12 @@ class SocketService {
     });
 
     this.socket.on("connect", () => {
-      console.log("✅ Conectado al servidor Socket.io");
+      console.log("Conectado al servidor Socket.io");
       this.emit("connection", true);
     });
 
     this.socket.on("disconnect", () => {
-      console.log("❌ Desconectado del servidor");
+      console.log("Desconectado del servidor");
       this.emit("connection", false);
     });
 
