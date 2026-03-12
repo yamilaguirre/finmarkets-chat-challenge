@@ -30,6 +30,7 @@ const { messages, isConnected, username } = storeToRefs(chatStore);
 
 let unsubscribeMessages: (() => void) | null = null;
 let unsubscribeConnection: (() => void) | null = null;
+let unsubscribeErrors: (() => void) | null = null;
 
 onMounted(() => {
   // Cargar mensajes del localStorage
@@ -49,12 +50,23 @@ onMounted(() => {
       chatStore.setConnected(connected);
     },
   );
+
+  // Escuchar errores
+  unsubscribeErrors = socketService.onError((error: any) => {
+    console.error("[Error de Socket]", error.message);
+    if (error.type === "RECONNECTION_FAILED") {
+      alert(
+        "No se pudo reconectar al servidor. Por favor, verifica que el servidor esté corriendo y recarga la página.",
+      );
+    }
+  });
 });
 
 onUnmounted(() => {
   // Cleanup
   if (unsubscribeMessages) unsubscribeMessages();
   if (unsubscribeConnection) unsubscribeConnection();
+  if (unsubscribeErrors) unsubscribeErrors();
 });
 
 const handleSendMessage = (message: string) => {
