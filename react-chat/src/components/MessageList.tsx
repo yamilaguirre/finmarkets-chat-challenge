@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { Avatar } from "./Avatar";
 
 interface Message {
   id: string;
@@ -21,15 +22,30 @@ export const MessageList: React.FC<MessageListProps> = ({ messages }) => {
     scrollToBottom();
   }, [messages]);
 
+  // Parsear el mensaje para extraer username y texto
+  const parseMessage = (content: string) => {
+    const match = content.match(/^(.+?):\s*(.+)$/);
+    if (match) {
+      return {
+        username: match[1],
+        text: match[2],
+      };
+    }
+    return {
+      username: "Anónimo",
+      text: content,
+    };
+  };
+
   return (
     <div
       style={{
         border: "1px solid #ddd",
-        borderRadius: "4px",
+        borderRadius: "8px",
         padding: "15px",
         height: "400px",
         overflowY: "auto",
-        backgroundColor: "#f9f9f9",
+        backgroundColor: "#f5f5f5",
         marginBottom: "15px",
       }}
     >
@@ -38,26 +54,59 @@ export const MessageList: React.FC<MessageListProps> = ({ messages }) => {
           No hay mensajes aún. Escribe el primero.
         </div>
       ) : (
-        messages.map((message) => (
-          <div
-            key={message.id}
-            style={{
-              padding: "8px 12px",
-              marginBottom: "8px",
-              backgroundColor: "white",
-              borderRadius: "4px",
-              borderLeft: "3px solid #007bff",
-              wordWrap: "break-word",
-            }}
-          >
-            <div style={{ fontSize: "14px", color: "#333" }}>
-              {message.content}
+        messages.map((message) => {
+          const { username, text } = parseMessage(message.content);
+          return (
+            <div
+              key={message.id}
+              style={{
+                display: "flex",
+                gap: "12px",
+                padding: "12px",
+                marginBottom: "12px",
+                backgroundColor: "white",
+                borderRadius: "8px",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                transition: "box-shadow 0.2s",
+              }}
+            >
+              <Avatar username={username} size={40} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    marginBottom: "4px",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontWeight: "600",
+                      color: "#333",
+                      fontSize: "14px",
+                    }}
+                  >
+                    {username}
+                  </span>
+                  <span style={{ fontSize: "11px", color: "#999" }}>
+                    {new Date(message.timestamp).toLocaleTimeString()}
+                  </span>
+                </div>
+                <div
+                  style={{
+                    fontSize: "14px",
+                    color: "#555",
+                    wordWrap: "break-word",
+                    lineHeight: "1.4",
+                  }}
+                >
+                  {text}
+                </div>
+              </div>
             </div>
-            <div style={{ fontSize: "11px", color: "#999", marginTop: "4px" }}>
-              {new Date(message.timestamp).toLocaleTimeString()}
-            </div>
-          </div>
-        ))
+          );
+        })
       )}
       <div ref={messagesEndRef} />
     </div>

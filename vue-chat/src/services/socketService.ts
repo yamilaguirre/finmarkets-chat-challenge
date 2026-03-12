@@ -13,7 +13,7 @@ interface SocketError {
 class SocketService {
   private socket: Socket | null = null;
   private listeners: Map<string, Function[]> = new Map();
-  private reconnectAttempts: number = 0;
+  // private reconnectAttempts: number = 0;
   private maxReconnectAttempts: number = 5;
 
   /**
@@ -34,7 +34,7 @@ class SocketService {
 
     this.socket.on("connect", () => {
       console.log("Conectado al servidor Socket.io");
-      this.reconnectAttempts = 0;
+      // this.reconnectAttempts = 0;
       this.emit("connection", true);
     });
 
@@ -54,7 +54,7 @@ class SocketService {
     });
 
     this.socket.on("reconnect_attempt", (attemptNumber: number) => {
-      this.reconnectAttempts = attemptNumber;
+      // this.reconnectAttempts = attemptNumber;
       console.log(
         `Intento de reconexión ${attemptNumber}/${this.maxReconnectAttempts}`,
       );

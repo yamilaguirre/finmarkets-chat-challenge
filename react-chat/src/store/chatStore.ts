@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { socketService } from "../services/socketService";
+import { generateRandomUsername } from "../utils/userUtils";
 
 interface Message {
   id: string;
@@ -22,12 +23,20 @@ interface ChatState {
 const STORAGE_KEY = "chat-messages";
 const USERNAME_KEY = "chat-username";
 
+// Generar o recuperar username
+const getOrCreateUsername = (): string => {
+  const stored = localStorage.getItem(USERNAME_KEY);
+  if (stored) return stored;
+
+  const newUsername = generateRandomUsername();
+  localStorage.setItem(USERNAME_KEY, newUsername);
+  return newUsername;
+};
+
 export const useChatStore = create<ChatState>((set, get) => ({
   messages: [],
   isConnected: false,
-  username:
-    localStorage.getItem(USERNAME_KEY) ||
-    `Usuario${Math.floor(Math.random() * 1000)}`,
+  username: getOrCreateUsername(),
 
   addMessage: (content: string) => {
     const message: Message = {

@@ -1,18 +1,31 @@
 <template>
-  <div class="chat-window">
-    <h1 class="title">Chat en Tiempo Real - Vue 3</h1>
+  <div class="chat-container">
+    <!-- Header -->
+    <div class="chat-header">
+      <h1 class="title">Chat en Tiempo Real - Vue 3</h1>
 
-    <div class="username-display">
-      Usuario: <strong>{{ username }}</strong>
+      <div class="user-info">
+        <Avatar :username="username" :size="36" />
+        <div class="user-details">
+          <div class="user-label">Conectado como</div>
+          <strong class="user-name">{{ username }}</strong>
+        </div>
+      </div>
     </div>
 
-    <ConnectionStatus :is-connected="isConnected" />
+    <!-- Body -->
+    <div class="chat-body">
+      <ConnectionStatus :is-connected="isConnected" />
 
-    <MessageList :messages="messages" />
+      <MessageList :messages="messages" />
 
-    <MessageInput :disabled="!isConnected" @send-message="handleSendMessage" />
+      <MessageInput
+        :disabled="!isConnected"
+        @send-message="handleSendMessage"
+      />
 
-    <div class="info-text">Los mensajes se guardan en localStorage</div>
+      <div class="info-text">Los mensajes se guardan en localStorage</div>
+    </div>
   </div>
 </template>
 
@@ -24,6 +37,7 @@ import { socketService } from "../services/socketService";
 import ConnectionStatus from "./ConnectionStatus.vue";
 import MessageList from "./MessageList.vue";
 import MessageInput from "./MessageInput.vue";
+import Avatar from "./Avatar.vue";
 
 const chatStore = useChatStore();
 const { messages, isConnected, username } = storeToRefs(chatStore);
@@ -75,23 +89,56 @@ const handleSendMessage = (message: string) => {
 </script>
 
 <style scoped>
-.chat-window {
-  max-width: 600px;
-  margin: 50px auto;
+.chat-container {
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background-color: white;
+  overflow: hidden;
+}
+
+.chat-header {
+  background: linear-gradient(135deg, #42b883 0%, #35495e 100%);
   padding: 20px;
-  font-family: Arial, sans-serif;
+  color: white;
 }
 
 .title {
   text-align: center;
-  color: #333;
-  margin-bottom: 20px;
+  margin: 0 0 15px 0;
+  font-size: 24px;
+  font-weight: 600;
 }
 
-.username-display {
-  margin-bottom: 10px;
-  color: #666;
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 10px 15px;
+  border-radius: 8px;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-label {
   font-size: 14px;
+  opacity: 0.9;
+}
+
+.user-name {
+  font-size: 16px;
+}
+
+.chat-body {
+  padding: 20px;
 }
 
 .info-text {

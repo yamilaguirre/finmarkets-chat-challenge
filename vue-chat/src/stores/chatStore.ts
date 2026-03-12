@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { socketService } from "../services/socketService";
+import { generateRandomUsername } from "../utils/userUtils";
 
 interface Message {
   id: string;
@@ -11,14 +12,21 @@ interface Message {
 const STORAGE_KEY = "chat-messages-vue";
 const USERNAME_KEY = "chat-username-vue";
 
+// Generar o recuperar username
+const getOrCreateUsername = (): string => {
+  const stored = localStorage.getItem(USERNAME_KEY);
+  if (stored) return stored;
+
+  const newUsername = generateRandomUsername();
+  localStorage.setItem(USERNAME_KEY, newUsername);
+  return newUsername;
+};
+
 export const useChatStore = defineStore("chat", () => {
   // State
   const messages = ref<Message[]>([]);
   const isConnected = ref(false);
-  const username = ref(
-    localStorage.getItem(USERNAME_KEY) ||
-      `Usuario${Math.floor(Math.random() * 1000)}`,
-  );
+  const username = ref(getOrCreateUsername());
 
   // Actions
   const addMessage = (content: string) => {
